@@ -1,5 +1,6 @@
 import { FormEvent, useState, useCallback, useRef } from 'react';
 import clsx from 'clsx';
+import { Text } from '../text';
 
 import { ArrowButton } from 'components/arrow-button';
 import { Button } from 'components/button';
@@ -25,12 +26,12 @@ type ArticleParamsFormProps = {
 
 export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 	const asideRef = useRef<HTMLElement>(null);
-	const [isOpen, setIsOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [state, setState] = useState<ArticleStateType>(props.initialParams);
 
 	useClose({
-		isOpen: isOpen,
-		onClose: () => setIsOpen(false),
+		isOpen: isMenuOpen,
+		onClose: () => setIsMenuOpen(false),
 		rootRef: asideRef,
 	});
 
@@ -40,7 +41,7 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 			setState((prev) => ({ ...prev, [key]: value }));
 		};
 
-	const onClick = () => setIsOpen((prev) => !prev);
+	const onClick = () => setIsMenuOpen((prev) => !prev);
 
 	const onApply = useCallback(
 		(evt: FormEvent<HTMLFormElement>) => {
@@ -57,13 +58,15 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 
 	return (
 		<div>
-			<ArrowButton onClick={onClick} isOpen={isOpen} />
+			<ArrowButton onClick={onClick} isOpen={isMenuOpen} />
 			<aside
 				ref={asideRef}
-				className={clsx(styles.container, isOpen && styles.container_open)}>
+				className={clsx(styles.container, isMenuOpen && styles.container_open)}>
 				<form className={styles.form} onSubmit={onApply} onReset={onReset}>
 					<div className={styles.content}>
-						<span className={styles.title}>Задайте параметры</span>
+						<Text as='h2' className={styles.title}>
+							Задайте параметры
+						</Text>
 						<Select
 							title={'Шрифт'}
 							selected={state.fontFamilyOption}
